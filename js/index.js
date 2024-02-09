@@ -41,6 +41,15 @@ export class Pkarr {
     const url = relay.replace(/\/+$/, '') + '/' + id
 
     const response = await fetch(url)
+
+    if (!response.ok) {
+      if (response.status === 404) {
+        return null
+      } else {
+        throw new Error(response.statusText)
+      }
+    }
+
     const bytes = Buffer.from(await response.arrayBuffer())
 
     return SignedPacket.fromBytes(publicKey, bytes)

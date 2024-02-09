@@ -35,3 +35,15 @@ test('successful put - get', async (t) => {
   serverA.close()
   serverB.close()
 })
+
+test('404', async (t) => {
+  const serverA = await Server.start({ dht: new DHT({ storage: null }) })
+
+  const keyPair = generateKeyPair()
+
+  const response = await Pkarr.relayGet(serverA.address, keyPair.publicKey)
+
+  t.absent(response)
+
+  serverA.close()
+})
