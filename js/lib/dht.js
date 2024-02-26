@@ -21,7 +21,7 @@ const DEFAULT_BOOTSTRAP = [
   return { host, port: Number(port) }
 })
 
-const DEFAULT_STORAGE_LOCATION = path.join(homedir(), '.config', 'pkarr')
+export const DEFAULT_STORAGE_LOCATION = path.join(homedir(), '.config', 'pkarr')
 
 export class DHT {
   /**
@@ -31,7 +31,7 @@ export class DHT {
    * @param {string} [options.storageLocation] - location to store bootstrap nodes at
    */
   constructor (options = {}) {
-    const _storage = options.storage || new Storage(options.storageLocation)
+    const _storage = options.storage || (options.storageLocation && new Storage(options.storageLocation))
     options.bootstrap = options.bootstrap || DEFAULT_BOOTSTRAP
 
     this._dht = new _DHT(options)
@@ -283,6 +283,9 @@ class Storage {
     try {
       const data = fs.readFileSync(filepath)
       const string = data.toString()
+      if (string.length === 0) {
+        return
+      }
       const nodes = JSON.parse(string)
 
       for (const node of nodes) {

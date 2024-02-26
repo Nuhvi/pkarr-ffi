@@ -7,7 +7,7 @@ import path, { dirname } from 'path'
 import { homedir } from 'os'
 import { fileURLToPath } from 'url'
 
-import DHT from './lib/dht.js'
+import { DHT, DEFAULT_STORAGE_LOCATION } from './lib/dht.js'
 import Republisher from './lib/republisher.js'
 import Server from './lib/relay.js'
 import Pkarr from './index.js'
@@ -143,7 +143,7 @@ const publish = async () => {
   stdin.setRawMode(false)
   stdin.pause()
 
-  const dht = new DHT()
+  const dht = new DHT({ storageLocation: DEFAULT_STORAGE_LOCATION })
   const [success, fail] = loading('Publishing')
 
   /** @type {import('dns-packet').Packet} */

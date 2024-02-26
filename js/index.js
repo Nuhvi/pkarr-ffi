@@ -1,4 +1,4 @@
-import DHT from './lib/dht.js'
+import { DHT, DEFAULT_STORAGE_LOCATION } from './lib/dht.js'
 import _z32 from 'z32'
 import _dns from 'dns-packet'
 
@@ -64,7 +64,7 @@ export class Pkarr {
    * @returns {Promise<boolean>}
    */
   static async publish (signedPacket) {
-    const dht = new DHT()
+    const dht = new DHT({ storageLocation: DEFAULT_STORAGE_LOCATION })
 
     return dht.put(signedPacket.bep44Args())
       .then(() => true)
@@ -84,7 +84,7 @@ export class Pkarr {
    * @returns {Promise<{signedPacket: SignedPacket, nodes: {host: string, port: number}[]} | null>}
    */
   static async resolve (key, options = {}) {
-    const dht = new DHT()
+    const dht = new DHT({ storageLocation: DEFAULT_STORAGE_LOCATION })
     try {
       const result = await dht.get(decodeKey(key), options)
         .finally(() => dht.destroy())
